@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nessi's Birthday Chase!</title>
+    <title>Nessi's Birthday Tower!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
             --pink: #ff80bf;
             --dark-pink: #ff1493;
             --soft-white: #fff5f8;
-            --cream: #fffee0;
         }
 
         body {
@@ -21,52 +20,62 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden; 
-            touch-action: manipulation; 
+            touch-action: none; 
         }
 
-        /* --- Sticker Layer - Positioned closer to center --- */
+        /* --- სტიკერების ფენა - ოპტიმიზირებული მობილურისთვის --- */
         .sticker-layer { 
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100%; 
             height: 100%; 
-            z-index: -1; 
+            z-index: 1; /* თამაშის უკან */
             pointer-events: none; 
         }
 
         .sticker { 
             position: absolute; 
-            width: clamp(110px, 18vw, 160px); 
-            filter: none; 
-            transition: transform 0.3s ease; 
+            width: clamp(70px, 15vw, 120px); /* უფრო პატარა ზომა მობილურისთვის */
             opacity: 0.9;
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
         }
         
-        /* Adjusted coordinates to bring them closer to the game area */
-        #mermaid { top: 12%; left: 15%; transform: rotate(-10deg); }
-        #cool { top: 15%; right: 15%; transform: rotate(10deg); }
-        #hug { top: 45%; left: 12%; transform: translateY(-50%) rotate(-5deg); }
-        #gameon { top: 48%; right: 12%; transform: translateY(-50%) rotate(8deg); }
-        #princess { bottom: 18%; left: 18%; transform: rotate(5deg); }
-        #picnic { bottom: 12%; right: 18%; transform: rotate(-10deg); }
-        #witchy { bottom: 6%; left: 50%; transform: translateX(-50%) rotate(3deg); width: 120px;}
+        /* პოზიციონირება კიდეებში */
+        #mermaid { top: 10%; left: 5%; transform: rotate(-10deg); }
+        #cool { top: 12%; right: 5%; transform: rotate(10deg); }
+        #hug { top: 40%; left: 2%; opacity: 0.7; }
+        #gameon { top: 42%; right: 2%; opacity: 0.7; }
+        #princess { bottom: 5%; left: 5%; transform: rotate(5deg); }
+        #picnic { bottom: 5%; right: 5%; transform: rotate(-10deg); }
+        #witchy { bottom: 2%; left: 50%; transform: translateX(-50%); width: 80px;}
 
-        /* --- UI & Cupcake Game --- */
+        /* --- თამაშის ინტერფეისი --- */
         .header { text-align: center; padding: 10px; z-index: 10; margin-top: 5px;}
-        h1 { color: var(--dark-pink); font-size: clamp(1.8rem, 8vw, 2.5rem); text-shadow: 2px 2px white; margin: 0;}
+        h1 { color: var(--dark-pink); font-size: clamp(1.4rem, 6vw, 2rem); text-shadow: 2px 2px white; margin: 0;}
+
+        .score-box {
+            color: var(--dark-pink);
+            font-weight: bold;
+            z-index: 10;
+            font-size: 1.1rem;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin: 5px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
 
         #game-container {
             position: relative;
-            width: 80vw;
+            width: 85vw;
             max-width: 350px;
-            height: 35vh;
-            background: rgba(255, 255, 255, 0.6);
-            border: 4px dashed var(--pink);
+            height: 45vh; /* ცოტა მეტი სიმაღლე მობილურისთვის */
+            background: rgba(255, 255, 255, 0.5);
+            border: 3px dashed var(--pink);
             border-radius: 25px;
-            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -74,59 +83,67 @@
             backdrop-filter: blur(2px);
         }
 
+        /* --- კექსები --- */
         .falling-cupcake {
             position: absolute;
-            font-size: 40px;
+            font-size: 45px;
             cursor: pointer;
-            animation: fall linear infinite;
+            z-index: 10;
+            animation: fall linear forwards;
         }
 
         @keyframes fall {
-            0% { transform: translateY(-5vh) rotate(0deg); opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(40vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(-50px) rotate(0deg); }
+            100% { transform: translateY(50vh) rotate(360deg); }
         }
 
         #tower {
             display: flex;
             flex-direction: column-reverse;
             align-items: center;
-            width: 70px;
+            width: 80px;
             margin-bottom: 5px;
+            z-index: 6;
         }
 
         .tower-cake {
-            font-size: 30px;
-            line-height: 20px; 
+            font-size: 40px;
+            line-height: 25px; 
             animation: stack-in 0.3s ease-out forwards;
         }
 
         @keyframes stack-in {
-            0% { transform: translateY(-50px) scale(0); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+            0% { transform: translateY(-30px) scale(0); }
+            100% { transform: translateY(0) scale(1); }
         }
+
+        /* --- ტორტი და სანთელი --- */
+        .cake-section { 
+            height: 12vh; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            z-index: 10;
+            margin-top: 10px;
+        }
+        .cake { width: 80px; height: 40px; background: var(--pink); border-radius: 8px; position: relative;}
+        .icing { position: absolute; top: -4px; width: 100%; height: 15px; background: white; border-radius: 8px; }
+        .candle { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 5px; height: 20px; background: #7ce2ff; }
+        .flame { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 8px; height: 12px; background: orange; border-radius: 50%; animation: flicker 0.4s infinite alternate; }
+        
+        @keyframes flicker { from { opacity: 0.8; transform: translateX(-50%) scale(1); } to { opacity: 1; transform: translateX(-50%) scale(1.2); } }
+        .hidden { visibility: hidden; }
 
         #cat {
             position: absolute;
-            font-size: 130px;
-            bottom: -5vh;
-            right: -20vw;
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            opacity: 0;
+            font-size: 100px;
+            bottom: 0;
+            right: -150px;
+            transition: all 0.5s ease-in-out;
+            z-index: 20;
             pointer-events: none;
         }
-
-        .cat-appear { right: 5vw !important; opacity: 1 !important; transform: scale(1.1); }
-
-        /* --- Classic Elements --- */
-        .cake-section { height: 16vh; display: flex; flex-direction: column; justify-content: flex-end; margin: 5px 0; cursor: pointer; z-index: 10;}
-        .cake { width: 100px; height: 50px; background: var(--pink); border-radius: 10px 10px 5px 5px; position: relative;}
-        .icing { position: absolute; top: -5px; width: 100%; height: 20px; background: white; border-radius: 10px; }
-        .candle { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 6px; height: 25px; background: #7ce2ff; }
-        .flame { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 10px; height: 16px; background: orange; border-radius: 50%; box-shadow: 0 0 10px gold; animation: flicker 0.4s infinite alternate; }
-        @keyframes flicker { from { opacity: 0.8; } to { opacity: 1; transform: translateX(-50%) scale(1.2); } }
-
-        .hidden { display: none !important; }
+        .cat-appear { right: 10px !important; }
     </style>
 </head>
 <body onmousemove="spawnSparkle(event)" ontouchmove="spawnSparkleTouch(event)">
@@ -152,10 +169,9 @@
         </div>
     </div>
 
-    <div style="color: var(--dark-pink); font-weight: bold; z-index: 10; font-size: 1.1rem;">Tower Level: <span id="score">0</span></div>
+    <div class="score-box">Level: <span id="score">0</span> / 5</div>
     
     <div id="game-container">
-        <div id="falling-zone"></div>
         <div id="tower"></div>
         <div id="cat">🐱</div>
     </div>
@@ -164,41 +180,42 @@
         let level = 0;
         let isEating = false;
         const tower = document.getElementById('tower');
-        const fallingZone = document.getElementById('falling-zone');
         const scoreDisplay = document.getElementById('score');
         const cat = document.getElementById('cat');
         const mainTitle = document.getElementById('main-title');
+        const container = document.getElementById('game-container');
 
         function blowCandle() {
             document.getElementById('flame').classList.add('hidden');
-            confetti({ particleCount: 100, origin: { y: 0.4 } });
+            confetti({ particleCount: 100, origin: { y: 0.3 } });
+            setTimeout(() => document.getElementById('flame').classList.remove('hidden'), 3000);
         }
 
         const cupcakeEmojis = ['🧁', '🍰', '🎂', '🍩'];
 
         function spawnCupcake() {
-            if (isEating) return;
+            if (isEating || level >= 5) return;
 
             const cc = document.createElement('div');
             cc.className = 'falling-cupcake';
             cc.innerText = cupcakeEmojis[Math.floor(Math.random() * cupcakeEmojis.length)];
             
-            const containerWidth = document.getElementById('game-container').clientWidth;
-            cc.style.left = Math.random() * (containerWidth - 60) + 'px';
-            cc.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+            const rect = container.getBoundingClientRect();
+            const x = Math.random() * (rect.width - 50);
+            cc.style.left = x + 'px';
+            cc.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
 
             cc.onclick = () => {
-                addToTower(cc.innerText);
+                if(!isEating) addToTower(cc.innerText);
                 cc.remove();
             };
 
-            fallingZone.appendChild(cc);
-            setTimeout(() => { if(cc.parentNode) cc.remove(); }, 5000);
+            container.appendChild(cc);
+            setTimeout(() => { if(cc.parentNode) cc.remove(); }, 3000);
         }
 
         function addToTower(emoji) {
-            if (level >= 5 || isEating) return;
-
+            if (level >= 5) return;
             level++;
             scoreDisplay.innerText = level;
 
@@ -207,58 +224,47 @@
             tC.innerText = emoji;
             tower.appendChild(tC);
 
-            confetti({ particleCount: 10, origin: { x: 0.5, y: 0.8 } });
+            confetti({ particleCount: 15, scalar: 0.7, origin: { y: 0.8 } });
 
             if (level === 5) {
-                mainTitle.innerText = "Level 5 reached! Yay Nessi!";
-                confetti({ particleCount: 200, spread: 90, origin: { y: 0.7 } });
-                
-                document.getElementById('princess').style.transform = "scale(1.4) rotate(0deg)";
-                document.getElementById('princess').style.zIndex = "15";
-
-                setTimeout(catAttack, 1000); 
+                mainTitle.innerText = "YAY NESSI! 🎉";
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                setTimeout(catAttack, 1500); 
             }
         }
 
         function catAttack() {
             isEating = true;
             cat.classList.add('cat-appear');
-            mainTitle.innerText = "OH NO! Look out, Nessi!";
+            mainTitle.innerText = "OH NO! THE CAT!";
             
-            let eatCount = 0;
-            const cakes = tower.children;
             const eatInterval = setInterval(() => {
-                if (cakes.length > 0) {
-                    cakes[0].remove(); 
-                    confetti({ particleCount: 10, spread: 30, origin: { x: 0.5, y: 0.7 } });
-                    eatCount++;
+                if (tower.children.length > 0) {
+                    tower.lastChild.remove(); 
+                    confetti({ particleCount: 5, scalar: 0.5 });
                 } else {
                     clearInterval(eatInterval);
-                    finishAttack();
+                    setTimeout(finishAttack, 500);
                 }
-            }, 300);
+            }, 400);
         }
 
         function finishAttack() {
-            cat.innerHTML = '😺';
-            mainTitle.innerText = "The cat ate your tower! Quick, rebuild it!";
-            
-            setTimeout(() => {
-                document.getElementById('princess').style.transform = "";
-                document.getElementById('princess').style.zIndex = "";
-            }, 1000);
-
+            cat.innerText = '😺';
+            mainTitle.innerText = "Tower is gone! Rebuild it!";
             setTimeout(() => {
                 cat.classList.remove('cat-appear');
-                cat.innerHTML = '🐱';
-                level = 0;
-                scoreDisplay.innerText = level;
-                isEating = false;
-                mainTitle.innerText = "Build Nessi’s Tower! 🧁";
-            }, 2000);
+                setTimeout(() => {
+                    cat.innerText = '🐱';
+                    level = 0;
+                    scoreDisplay.innerText = level;
+                    isEating = false;
+                    mainTitle.innerText = "Build Nessi’s Tower! 🧁";
+                }, 1000);
+            }, 1000);
         }
 
-        setInterval(spawnCupcake, 900);
+        setInterval(spawnCupcake, 1000);
 
         function drawSparkle(x, y) {
             const s = document.createElement('div');
