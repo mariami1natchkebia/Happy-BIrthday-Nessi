@@ -20,12 +20,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             overflow: hidden; 
             touch-action: none; 
         }
 
-        /* --- Sticker Layer --- */
+        /* --- სტიკერების ფენა - ფიქსირებული კუთხეებში --- */
         .sticker-layer { 
             position: fixed; 
             top: 0; 
@@ -38,103 +38,108 @@
 
         .sticker { 
             position: absolute; 
-            width: 110px;
-            transition: all 0.3s ease;
+            width: 85px; /* ოპტიმალური ზომა მობილურისთვის */
+            filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
         }
 
-        /* განლაგება ისრების მიხედვით */
-        #mermaid { top: 15%; left: -20px; transform: rotate(-15deg); } /* მარცხნივ ზემოთ */
-        #cool { top: 12%; right: -15px; transform: rotate(15deg); }   /* მარჯვნივ ზემოთ */
-        #hug { bottom: 25%; left: -25px; transform: rotate(10deg); width: 130px; } /* მარცხნივ ქვემოთ */
-        #gameon { bottom: 20%; right: -20px; transform: rotate(-10deg); } /* მარჯვნივ ქვემოთ */
-        
-        #princess { bottom: 5%; left: 5%; width: 80px; }
-        #picnic { bottom: 5%; right: 5%; width: 90px; }
-        #witchy { bottom: 2%; left: 50%; transform: translateX(-50%); width: 70px; }
+        /* კუთხეებში განლაგება */
+        #mermaid { top: 10px; left: 10px; transform: rotate(-5deg); }
+        #cool { top: 10px; right: 10px; transform: rotate(5deg); }
+        #hug { bottom: 10px; left: 10px; transform: rotate(5deg); width: 100px; }
+        #gameon { bottom: 120px; right: 5px; transform: rotate(-10deg); width: 70px; }
+        #princess { bottom: 10px; right: 10px; width: 75px; }
+        #witchy { bottom: 5px; left: 50%; transform: translateX(-50%); width: 60px; }
 
-        /* Responsive მობილურისთვის */
-        @media (max-width: 480px) {
-            .sticker { width: 90px; }
-            #mermaid { left: -10px; top: 18%; }
-            #cool { right: -10px; top: 15%; }
-            #hug { left: -15px; bottom: 15%; width: 110px; }
-            #gameon { right: -15px; bottom: 18%; }
-        }
-
-        /* --- UI --- */
-        .header { text-align: center; padding: 5px; z-index: 10; }
-        h1 { color: var(--dark-pink); font-size: 1.8rem; text-shadow: 2px 2px white; margin: 5px 0;}
+        /* --- თამაშის ინტერფეისი --- */
+        .header { text-align: center; z-index: 10; margin-top: 10px; }
+        h1 { color: var(--dark-pink); font-size: 1.5rem; margin: 0; text-shadow: 1px 1px white; }
 
         .score-box {
             color: var(--dark-pink);
             font-weight: bold;
             z-index: 10;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 5px 15px;
-            border-radius: 20px;
-            margin-bottom: 10px;
+            background: white;
+            padding: 3px 12px;
+            border-radius: 15px;
+            margin: 5px 0;
+            font-size: 0.9rem;
+            border: 1px solid var(--pink);
         }
 
+        /* ცენტრალური კონტეინერი - არ ეხება კუთხეებს */
         #game-container {
             position: relative;
-            width: 85vw;
-            max-width: 320px;
-            height: 40vh;
+            width: 75vw;
+            max-width: 280px;
+            height: 45vh;
             background: rgba(255, 255, 255, 0.4);
-            border: 3px dashed var(--pink);
-            border-radius: 25px;
+            border: 2px dashed var(--pink);
+            border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
             z-index: 5;
+            margin-bottom: 5px;
         }
 
+        /* ცვივა შენი ატვირთული კექსები */
         .falling-cupcake {
             position: absolute;
-            font-size: 40px;
+            width: 50px;
+            height: 50px;
             cursor: pointer;
             z-index: 20;
+            background-size: contain;
+            background-repeat: no-repeat;
             animation: fall linear forwards;
         }
 
         @keyframes fall {
             0% { transform: translateY(-50px) rotate(0deg); }
-            100% { transform: translateY(45vh) rotate(360deg); }
+            100% { transform: translateY(50vh) rotate(360deg); }
         }
 
         #tower {
             display: flex;
             flex-direction: column-reverse;
             align-items: center;
-            width: 80px;
-            margin-bottom: 5px;
+            width: 70px;
+            z-index: 6;
         }
 
         .tower-cake {
-            font-size: 35px;
-            line-height: 22px; 
+            width: 55px;
+            height: 45px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            margin-bottom: -15px; /* კექსების ერთმანეთზე დალაგების ეფექტი */
             animation: stack-in 0.2s ease-out;
         }
 
         @keyframes stack-in {
-            0% { transform: translateY(-20px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
         }
 
-        .cake-section { height: 15vh; display: flex; flex-direction: column; justify-content: flex-end; z-index: 10; margin-bottom: 10px;}
-        .cake { width: 90px; height: 45px; background: var(--pink); border-radius: 10px; position: relative;}
-        .icing { position: absolute; top: -5px; width: 100%; height: 18px; background: white; border-radius: 10px; }
-        .candle { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 6px; height: 22px; background: #7ce2ff; }
-        .flame { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 10px; height: 15px; background: orange; border-radius: 50%; animation: flicker 0.4s infinite alternate; }
+        /* ტორტი ქვემოთ */
+        .cake-section { 
+            height: 10vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-end; 
+            z-index: 10;
+            margin-bottom: 20px;
+        }
+        .cake { width: 70px; height: 35px; background: var(--pink); border-radius: 8px; position: relative;}
+        .icing { position: absolute; top: -3px; width: 100%; height: 12px; background: white; border-radius: 8px; }
+        .candle { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 4px; height: 15px; background: #7ce2ff; }
+        .flame { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 7px; height: 10px; background: orange; border-radius: 50%; animation: flicker 0.4s infinite alternate; }
         
-        @keyframes flicker { from { opacity: 0.8; } to { opacity: 1; transform: translateX(-50%) scale(1.1); } }
-        .hidden { visibility: hidden; }
-
         #cat {
             position: absolute;
-            font-size: 80px;
-            bottom: 10px;
-            right: -120px;
+            width: 80px;
+            bottom: 0;
+            right: -100px;
             transition: right 0.5s ease-in-out;
             z-index: 30;
         }
@@ -149,12 +154,18 @@
         <img src="family_hug.png" id="hug" class="sticker">
         <img src="game_on.png" id="gameon" class="sticker">
         <img src="princess_moment.png" id="princess" class="sticker">
-        <img src="family_picnic.png" id="picnic" class="sticker">
         <img src="witchy_vibes.png" id="witchy" class="sticker">
     </div>
 
     <div class="header">
-        <h1 id="main-title">Nessi's Tower! 🧁</h1>
+        <h1 id="main-title">Nessi's Tower!</h1>
+    </div>
+
+    <div class="score-box">Tower Level: <span id="score">0</span></div>
+    
+    <div id="game-container">
+        <div id="tower"></div>
+        <img src="pusheen_PNG18.png" id="cat">
     </div>
 
     <div class="cake-section" onclick="blowCandle()">
@@ -162,13 +173,6 @@
             <div class="icing"></div>
             <div class="candle"><div class="flame" id="flame"></div></div>
         </div>
-    </div>
-
-    <div class="score-box">Level: <span id="score">0</span></div>
-    
-    <div id="game-container">
-        <div id="tower"></div>
-        <div id="cat">🐱</div>
     </div>
 
     <script>
@@ -180,39 +184,56 @@
         const mainTitle = document.getElementById('main-title');
         const container = document.getElementById('game-container');
 
-        function blowCandle() {
-            document.getElementById('flame').classList.add('hidden');
-            confetti({ particleCount: 100, origin: { y: 0.3 } });
-            setTimeout(() => document.getElementById('flame').classList.remove('hidden'), 3000);
-        }
+        // შენი ატვირთული კექსების ფაილის სახელები
+        const cupcakeImages = [
+            'cupcale-removebg-preview.png',
+            'cupcale-removebg-preview (1).png',
+            'cupcale-removebg-preview (2).png',
+            'cupcale-removebg-preview (3).png'
+        ];
 
-        const cupcakeEmojis = ['🧁', '🍰', '🎂', '🍩'];
+        function blowCandle() {
+            document.getElementById('flame').style.visibility = 'hidden';
+            confetti({ particleCount: 100, origin: { y: 0.8 } });
+            setTimeout(() => document.getElementById('flame').style.visibility = 'visible', 3000);
+        }
 
         function spawnCupcake() {
             if (isEating || level >= 5) return;
             const cc = document.createElement('div');
             cc.className = 'falling-cupcake';
-            cc.innerText = cupcakeEmojis[Math.floor(Math.random() * cupcakeEmojis.length)];
+            
+            const randomImg = cupcakeImages[Math.floor(Math.random() * cupcakeImages.length)];
+            cc.style.backgroundImage = `url('${randomImg}')`;
+            
             const rect = container.getBoundingClientRect();
-            cc.style.left = Math.random() * (rect.width - 40) + 'px';
+            cc.style.left = Math.random() * (rect.width - 50) + 'px';
             cc.style.animationDuration = (Math.random() * 1 + 2) + 's';
-            cc.onclick = () => { if(!isEating) addToTower(cc.innerText); cc.remove(); };
+
+            cc.onclick = () => {
+                if(!isEating) addToTower(randomImg);
+                cc.remove();
+            };
+
             container.appendChild(cc);
             setTimeout(() => { if(cc.parentNode) cc.remove(); }, 3000);
         }
 
-        function addToTower(emoji) {
+        function addToTower(imgSrc) {
             if (level >= 5) return;
             level++;
             scoreDisplay.innerText = level;
+
             const tC = document.createElement('div');
             tC.className = 'tower-cake';
-            tC.innerText = emoji;
+            tC.style.backgroundImage = `url('${imgSrc}')`;
             tower.appendChild(tC);
-            confetti({ particleCount: 10, scalar: 0.7, origin: { y: 0.8 } });
+
+            confetti({ particleCount: 10, scalar: 0.7, origin: { y: 0.7 } });
+
             if (level === 5) {
-                mainTitle.innerText = "WELL DONE! 🎉";
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                mainTitle.innerText = "YAY! YOU DID IT! 🎉";
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.5 } });
                 setTimeout(catAttack, 1500); 
             }
         }
@@ -230,7 +251,7 @@
                         level = 0;
                         scoreDisplay.innerText = level;
                         isEating = false;
-                        mainTitle.innerText = "Nessi's Tower! 🧁";
+                        mainTitle.innerText = "Nessi's Tower!";
                     }, 1000);
                 }
             }, 400);
@@ -245,6 +266,7 @@
             s.style.left = x + 'px';
             s.style.top = y + 'px';
             s.style.pointerEvents = 'none';
+            s.style.zIndex = '100';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 400);
         }
