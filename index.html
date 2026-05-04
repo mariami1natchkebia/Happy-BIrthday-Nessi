@@ -38,13 +38,13 @@
 
         .sticker { 
             position: absolute; 
-            width: clamp(85px, 18vw, 120px); /* გაზრდილი ზომა მცირე რეზოლუციებისთვის */
+            width: clamp(80px, 18vw, 120px); 
             opacity: 0.9;
             filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.1));
             transition: all 0.5s ease;
         }
         
-        /* დესკტოპის პოზიციონირება (რჩება უცვლელი) */
+        /* დესკტოპის პოზიციონირება */
         #mermaid { top: 10%; left: 5%; transform: rotate(-10deg); }
         #cool { top: 12%; right: 5%; transform: rotate(10deg); }
         #hug { top: 40%; left: 2%; opacity: 0.7; }
@@ -53,33 +53,35 @@
         #picnic { bottom: 5%; right: 5%; transform: rotate(-10deg); }
         #witchy { bottom: 2%; left: 50%; transform: translateX(-50%); width: 80px;}
 
-        /* --- მობილურზე (510px და დაბლა) ოპტიმიზაცია --- */
+        /* --- მობილურის ოპტიმიზაცია (სტიკერების ჩამოტანა ქვემოთ) --- */
         @media (max-width: 600px) {
             .sticker { 
-                width: 80px; /* ფიქსირებული, კარგად შესამჩნევი ზომა */
+                width: 70px; /* ოდნავ დავაპატარავეთ, რომ მეტი დაეტიოს */
             }
-            /* პოზიციონირება სქრინშოტის მიხედვით, ცარიელ ადგილებში */
-            #mermaid { top: 2%; left: 3%; transform: rotate(-5deg); }
-            #cool { top: 2%; right: 3%; transform: rotate(5deg); }
+
+            /* ზედა სტიკერები რჩება თავზე */
+            #mermaid { top: 2%; left: 3%; }
+            #cool { top: 2%; right: 3%; }
+
+            /* ყველა დანარჩენი სტიკერი ჩამოვიტანეთ ჩარჩოს დაბლა, თავისუფალ სივრცეში */
+            #princess { top: auto; bottom: 18%; left: 5%; transform: rotate(5deg); }
+            #gameon { top: auto; bottom: 18%; right: 5%; transform: rotate(-5deg); }
             
-            #princess { top: 22%; left: 1%; transform: rotate(10deg); }
-            #gameon { top: 22%; right: 1%; transform: rotate(-10deg); }
+            #hug { top: auto; bottom: 8%; left: 8%; opacity: 0.9; }
+            #picnic { top: auto; bottom: 8%; right: 8%; opacity: 0.9; }
             
-            #hug { bottom: 15%; left: 1%; transform: rotate(-8deg); }
-            #picnic { bottom: 15%; right: 1%; transform: rotate(8deg); }
-            
-            #witchy { bottom: 2%; left: 5%; transform: none; width: 55px; opacity: 0.6; }
+            #witchy { bottom: 2%; left: 50%; transform: translateX(-50%); width: 50px; opacity: 0.7; }
 
             #game-container {
-                width: 78vw; /* დავიწროვდა, რომ გვერდებზე სტიკერები არ გადაიფაროს */
-                height: 42vh;
+                width: 85vw;
+                height: 40vh; /* ცოტა დავაპატარავეთ სიმაღლეში, რომ ქვემოთ სტიკერებს ადგილი დარჩეთ */
+                margin-bottom: 20px; /* სივრცე ჩარჩოსა და ქვედა სტიკერებს შორის */
             }
-            h1 { font-size: 1.4rem; }
         }
 
         /* --- თამაშის ინტერფეისი --- */
         .header { text-align: center; padding: 10px; z-index: 10; margin-top: 5px;}
-        h1 { color: var(--dark-pink); text-shadow: 2px 2px white; margin: 0;}
+        h1 { color: var(--dark-pink); font-size: 1.5rem; text-shadow: 2px 2px white; margin: 0;}
 
         .score-box {
             color: var(--dark-pink);
@@ -106,7 +108,7 @@
             align-items: flex-end;
             z-index: 5;
             backdrop-filter: blur(2px);
-            overflow: hidden; /* კექსები ჩარჩოს გარეთ რომ არ გავიდნენ */
+            overflow: hidden;
         }
 
         /* --- კექსები --- */
@@ -121,7 +123,7 @@
 
         @keyframes fall {
             0% { transform: translateY(-60px) rotate(0deg); }
-            100% { transform: translateY(46vh) rotate(360deg); }
+            100% { transform: translateY(45vh) rotate(360deg); }
         }
 
         #tower {
@@ -152,24 +154,21 @@
             justify-content: flex-end; 
             z-index: 10;
             margin-top: 10px;
-            cursor: pointer;
         }
         .cake { width: 80px; height: 35px; background: var(--pink); border-radius: 8px; position: relative;}
         .icing { position: absolute; top: -4px; width: 100%; height: 12px; background: white; border-radius: 8px; }
         .candle { position: absolute; top: -18px; left: 50%; transform: translateX(-50%); width: 5px; height: 18px; background: #7ce2ff; }
         .flame { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 8px; height: 12px; background: orange; border-radius: 50%; animation: flicker 0.4s infinite alternate; }
         
-        @keyframes flicker { from { opacity: 0.8; transform: translateX(-50%) scale(1); } to { opacity: 1; transform: translateX(-50%) scale(1.2); } }
         .hidden { visibility: hidden; }
 
         #cat {
             position: absolute;
             font-size: 80px;
-            bottom: -10px;
+            bottom: -5px;
             right: -120px;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s ease-in-out;
             z-index: 20;
-            pointer-events: none;
         }
         .cat-appear { right: 5px !important; }
     </style>
@@ -223,26 +222,21 @@
 
         function spawnCupcake() {
             if (isEating || level >= 5) return;
-
             const cc = document.createElement('div');
             cc.className = 'falling-cupcake';
             cc.innerText = cupcakeEmojis[Math.floor(Math.random() * cupcakeEmojis.length)];
-            
             const rect = container.getBoundingClientRect();
-            // კორექტირება, რომ კექსი ჩარჩოდან არ გავარდეს
-            const x = Math.random() * (rect.width - 55);
+            const x = Math.random() * (rect.width - 50);
             cc.style.left = x + 'px';
             cc.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
-
-            const handlePick = (e) => {
+            
+            const pick = (e) => {
                 e.preventDefault();
                 if(!isEating) addToTower(cc.innerText);
                 cc.remove();
             };
-
-            cc.onclick = handlePick;
-            cc.ontouchstart = handlePick;
-
+            cc.onclick = pick;
+            cc.ontouchstart = pick;
             container.appendChild(cc);
             setTimeout(() => { if(cc.parentNode) cc.remove(); }, 3000);
         }
@@ -251,14 +245,11 @@
             if (level >= 5) return;
             level++;
             scoreDisplay.innerText = level;
-
             const tC = document.createElement('div');
             tC.className = 'tower-cake';
             tC.innerText = emoji;
             tower.appendChild(tC);
-
             confetti({ particleCount: 15, scalar: 0.7, origin: { y: 0.8 } });
-
             if (level === 5) {
                 mainTitle.innerText = "YAY NESSI! 🎉";
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -270,15 +261,10 @@
             isEating = true;
             cat.classList.add('cat-appear');
             mainTitle.innerText = "OH NO! THE CAT!";
-            
             const eatInterval = setInterval(() => {
                 if (tower.children.length > 0) {
                     tower.lastChild.remove(); 
-                    confetti({ 
-                        particleCount: 5, 
-                        scalar: 0.5,
-                        origin: { x: 0.8, y: 0.8 } 
-                    });
+                    confetti({ particleCount: 5, scalar: 0.5 });
                 } else {
                     clearInterval(eatInterval);
                     setTimeout(finishAttack, 500);
@@ -311,14 +297,11 @@
             s.style.top = y + 'px';
             s.style.pointerEvents = 'none';
             s.style.zIndex = '100';
-            s.style.fontSize = '20px';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 500);
         }
         function spawnSparkle(e) { drawSparkle(e.clientX, e.clientY); }
-        function spawnSparkleTouch(e) { 
-            if(e.touches[0]) drawSparkle(e.touches[0].clientX, e.touches[0].clientY); 
-        }
+        function spawnSparkleTouch(e) { if(e.touches[0]) drawSparkle(e.touches[0].clientX, e.touches[0].clientY); }
     </script>
 </body>
 </html>
